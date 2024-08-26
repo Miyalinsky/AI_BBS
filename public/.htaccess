@@ -1,9 +1,9 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /mybbs/
+    RewriteBase /AI_BBS/
     RewriteRule ^index\.html$ - [L]
 
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . /mybbs/index.html [L]
+    RewriteRule . /AI_BBS/index.html [L]
 </IfModule>

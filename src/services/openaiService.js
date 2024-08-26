@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { getPosts } from './firestoreService';
 
+// 新しいスレッドのタイトルと最初のレスを生成
 export const generateThreadWithFirstPost = async () => {
     const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
     if (!apiKey) {
@@ -48,6 +49,7 @@ export const generateThreadWithFirstPost = async () => {
     }
 };
 
+// レス生成関数
 export const generateReplyPost = async (prompt, threadId) => {
     const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
     if (!apiKey) {
@@ -81,3 +83,49 @@ export const generateReplyPost = async (prompt, threadId) => {
         throw error;
     }
 };
+
+// 画像生成後のレス生成
+export const generateImagePost = async (imagePrompt, threadTitle) => {
+    const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+    if (!apiKey) {
+        throw new Error("OpenAI API key is missing");
+    }
+
+    const headers = {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+    };
+
+    const data = {
+        prompt: imagePrompt,
+        n: 1,
+        size: "256x256"
+    };
+
+    try {
+        const response = await axios.post('https://api.openai.com/v1/images/generations', data, { headers });
+        const imageUrl = response.data.data[0].url;
+
+        // 生成された画像に関連する自然なレスを作成
+        const postPrompt = `スレッド「${threadTitle}」に関連した画像を作成しました。この画像について自然なコメントをしてください。`;
+        const replyResponse = await axios.post('https://api.openai.com/v1/chat/completions', {
+            model: 'gpt-4o-mini',
+            messages: [
+                { role: 'system', content: '画像に関連する適切なレスを生成してください。' },
+                { role: 'user', content: postPrompt }
+            ],
+            temperature: 1.2,
+            max_tokens: 150,
+        }, { headers });
+
+        const replyContent = replyResponse.data.choices[0].message.content.trim();
+
+        // 画像を表示するために <img> タグを使用
+        return `${replyContent}\n\n<img src="${imageUrl}" alt="Generated Image" style="max-width:100%;">`;
+
+    } catch (error) {
+        console.error('Error generating image or reply:', error.response ? error.response.data : error);
+        throw error;
+    }
+};
+

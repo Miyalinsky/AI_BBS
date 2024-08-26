@@ -108,19 +108,18 @@ const ThreadDetail = ({ userId }) => {
             const postNumber = parseInt(p1, 10);
             return `<a href="#" class="anchor-link" data-post-number="${postNumber}">${match}</a>`;
         });
-        // console.log("Parsed Text:", parsedText); // デバッグ用ログ
         return parsedText;
     };
 
-    // const handleAnchorClick = (e, postNumber) => {
-    //     e.preventDefault();
-    //     // console.log("Anchor clicked, post number:", postNumber); // 追加: ログを出力
-    //     const targetPost = posts.find((post, index) => index + 1 === postNumber);
-    //     if (targetPost) {
-    //         // console.log("Target post found:", targetPost); // 追加: ターゲットポストのログ
-    //         setAnchorPost(targetPost);
-    //     }
-    // };
+    // 修正: レスに画像URLが含まれている場合はそのままレンダリング
+    const renderContent = (post) => {
+        const content = post.content;
+        if (content.includes('<img')) {
+            return content;  // 画像URLを含む場合はエスケープしない
+        } else {
+            return escapeHtml(content);  // 通常のレスはエスケープ
+        }
+    };
 
     const handleAnchorClick = (e, postNumber) => {
         e.preventDefault();
@@ -135,8 +134,6 @@ const ThreadDetail = ({ userId }) => {
             });
         }
     };
-
-
 
     const handleCloseAnchor = () => {
         setAnchorPost(null);
@@ -170,7 +167,7 @@ const ThreadDetail = ({ userId }) => {
                         </div>
                         <div
                             className="post-content"
-                            dangerouslySetInnerHTML={{ __html: parseAnchors(escapeHtml(post.content)) }}
+                            dangerouslySetInnerHTML={{ __html: parseAnchors(renderContent(post)) }}
                             onClick={(e) => {
                                 if (e.target.className === 'anchor-link') {
                                     handleAnchorClick(e, parseInt(e.target.getAttribute('data-post-number'), 10));
