@@ -1,0 +1,91 @@
+/* リストのスタイルをリセット */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* レスのスタイル */
+.post {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.post-header div {
+    margin-right: 10px;
+}
+
+.post-content {
+    margin-top: 10px;
+    white-space: pre-wrap;
+}
+
+/* 投稿フォームのスタイル */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.form-container form {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-container input[type="text"],
+.form-container textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-container button {
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: center;
+    width: 90%;
+}
+
+/* アンカーのポップアップスタイル */
+.anchor-popup {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    top: 50px;
+    right: 50px;
+    width: 300px;
+    border-radius: 5px;
+}
+
+.anchor-popup-header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.anchor-popup-content {
+    margin-top: 10px;
+}
+
+.anchor-link {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
